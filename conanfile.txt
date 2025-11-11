@@ -1,0 +1,11 @@
+[requires]
+fmt/[>=12.1]
+inno_client_sdk/[>=3.103.4]
+argparse/[>=3.2]
+pcl/[>=1.14.1]
+
+[generators]
+CMakeDeps
+
+[layout]
+cmake_layout

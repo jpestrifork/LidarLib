@@ -1,0 +1,27 @@
+{
+	"version": 3,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 28
+	},
+	"configurePresets": [
+		{
+			"name": "default",
+			"hidden": true,
+			"generator": "Ninja",
+			"cacheVariables": {
+				"CMAKE_CUDA_COMPILER": "/usr/local/cuda-12.9/bin/nvcc",
+				"CMAKE_CUDA_ARCHITECTURES": "native",
+				"CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/../cmake-conan/conan_provider.cmake",
+				"CONAN_COMMAND": "/home/pbe/miniconda3/bin/conan"
+			}
+		},
+		{
+			"name": "Debug",
+			"inherits": "default",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		}
+	]
+}
