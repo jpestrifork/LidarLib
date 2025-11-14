@@ -50,13 +50,14 @@ int main(int argc, char** argv)
 
 	while (not interrupted)
 	{
-		if (const auto points = processor.getPointCloud())
+		using namespace std::chrono_literals;
+		if (const auto points = processor.getPointCloud(10s))
 		{
-			fmt::print("Got a point cloud with {:d} coordinates in it", "{:d}", points->size());
+			fmt::print("Got a point cloud with {:d} coordinates in it\n", points->points.size());
 		}
 		else
 		{
-			fmt::print(stderr, "Seems like we timed out, let's try again");
+			fmt::print(stderr, "Seems like we timed out, let's try again\n");
 		}
 	}
 }
