@@ -3,6 +3,8 @@ fmt/[>=12.1]
 inno_client_sdk/[>=3.103.4]
 argparse/[>=3.2]
 pcl/[>=1.14.1]
+nanobind/[>=2.9.2]
+
 
 [generators]
 CMakeDeps

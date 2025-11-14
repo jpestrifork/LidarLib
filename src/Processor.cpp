@@ -9,6 +9,8 @@
 #include <fmt/ranges.h>
 #include <sdk_client/lidar_client.h>
 
+#include <span>
+
 
 namespace inno
 {
@@ -54,13 +56,13 @@ namespace inno
 	}
 
 	void messageCallback(int /*handle*/, void* /*context*/, uint32_t /*fromRemote*/,
-		                 const InnoMessageLevel level, InnoMessageCode /*code*/, const char* errorMessage)
+	                     const InnoMessageLevel level, InnoMessageCode /*code*/, const char* errorMessage)
 	{
-		fmt::print("Message for you sir: ({}) {}\n", static_cast<int>(level), errorMessage);
+		//fmt::print("Message for you sir: ({}) {}\n", static_cast<int>(level), errorMessage);
 	}
 
-	template <typename PointerType>
-	uint32_t insertHelper(const InnoDataPacket* const pkt, const Processor::CloudPointer& pc, PointerType* point )
+	template<typename PointerType>
+	uint32_t insertHelper(const InnoDataPacket* const pkt, const Processor::CloudPointer& pc, PointerType* point)
 	{
 		ProcessorInvasive::PointCloud addition;
 		addition.reserve(pkt->item_number);
@@ -89,37 +91,67 @@ namespace inno
 		else
 		{
 			auto nc = context->getNextCloud();
+			if (!nc)
+			{
+				nc = std::make_shared<Processor::PointCloud>();
+			}
 			if (pkt->sub_idx == 0)
 			{
 				// We've started a new frame
 				const ProcessorInvasive::PointCloud pc;
 				// We should probably make sure it is not engaged
-				nc = pc.makeShared();
+				context->getNextCloud() = pc.makeShared();
+				//fmt::println("Starting a new frame, frame {:d}", pkt->idx );
 			}
-			if (pkt->type == INNO_ITEM_TYPE_XYZ_POINTCLOUD)
+			switch (pkt->type)
 			{
-				const auto point = pkt->xyz_points;
-				auto inserted = insertHelper(pkt, nc, point);
-				fmt::print("Inserted {:d} datapoints\n", inserted);
-			}
-			else if (CHECK_EN_XYZ_POINTCLOUD_DATA(pkt->type))
-			{
-				const auto point = pkt->en_xyz_points;
-				auto inserted = insertHelper(pkt, nc, point);
-				fmt::print("Inserted {:d} datapoints\n", inserted);
-			}
-			else
-			{
-				fmt::print(stderr, "Unsupported PointCloudData {:d}\n",pkt->type);
+				case INNO_ITEM_TYPE_XYZ_POINTCLOUD:
+				{
+					const auto point = pkt->xyz_points;
+					auto inserted = insertHelper(pkt, nc, point);
+				}
+				break;
+
+				case INNO_ROBINW_ITEM_TYPE_XYZ_POINTCLOUD:
+				case INNO_FALCONII_DOT_1_ITEM_TYPE_XYZ_POINTCLOUD:
+				case INNO_ROBINELITE_ITEM_TYPE_XYZ_POINTCLOUD:
+				case INNO_ROBINE2_ITEM_TYPE_XYZ_POINTCLOUD:
+				{
+					const auto point = pkt->en_xyz_points;
+					auto inserted = insertHelper(pkt, nc, point);
+				}
+				break;
+
+				case INNO_ITEM_TYPE_SPHERE_POINTCLOUD:
+				{
+					auto inno_blocks = pkt->inno_block1s;
+					for (uint32_t i = 0; i < pkt->item_number; i++)
+					{
+						const auto blk = inno_blocks[i];
+						auto v = blk.header.v_angle * kRadPerInnoAngleUnit;
+						auto h = blk.header.h_angle * kRadPerInnoAngleUnit;
+						auto r = blk.points[0].radius;
+						pcl::PointXYZ point{};
+						point.x = r * sin(v) * cos(h);
+						point.y = r * sin(v) * sin(h);
+						point.z = r * cos(v);
+						nc->push_back(point);
+					}
+				}
+				break;
+
+				default:
+				{
+					fmt::print(stderr, "Unsupported PointCloudData {:d}\n", pkt->type);
+				}
 			}
 		}
-		fmt::print("Received frame {:d}, subframe {:d} with {:d} entries\n", pkt->idx, pkt->sub_idx, pkt->item_number);
 		return 0;
 	}
 
 	int statusPacketCallback(int /*lidar_handle*/, void* /*ctx*/, const InnoStatusPacket* pkt)
 	{
-		fmt::print("Got status from LiDAR with S/N {}\n", pkt->sn);
+		//fmt::print("Got status from LiDAR with S/N {}\n", pkt->sn);
 		return 0;
 	}
 

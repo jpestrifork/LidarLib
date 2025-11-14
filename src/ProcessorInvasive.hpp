@@ -16,7 +16,7 @@ namespace inno
 		 *
 		 * @return the shared pointer to the point cloud being built. May not be engaged
 		 */
-		CloudPointer getNextCloud()
+		CloudPointer& getNextCloud()
 		{
 			return nextCloud;
 		}

@@ -13,7 +13,8 @@
 				"CMAKE_CUDA_COMPILER": "/usr/local/cuda-12.9/bin/nvcc",
 				"CMAKE_CUDA_ARCHITECTURES": "native",
 				"CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/../cmake-conan/conan_provider.cmake",
-				"CONAN_COMMAND": "/home/pbe/miniconda3/bin/conan"
+				"CONAN_COMMAND": "/home/pbe/miniconda3/bin/conan",
+				"Python_ROOT_DIR": "/home/pbe/miniconda3/"
 			}
 		},
 		{
