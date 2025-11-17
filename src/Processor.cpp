@@ -18,7 +18,17 @@ namespace inno
 	{
 		handle = inno_lidar_open_live("cuLiDAR", ip.c_str(), commsPort, INNO_LIDAR_PROTOCOL_PCS_UDP, udpPort);
 		setupCallbacks(handle, this);
-		inno_lidar_start(handle);
+		// This should probably be a parameter, if not set, seems like it uses spherical coordinates instead
+		inno_lidar_set_callbacks_data_type(handle, INNO_CALLBACK_XYZ_FRAME);
+		if (inno_lidar_start(handle) != 0)
+		{
+			fmt::println(stderr,"Could not start lidar \"{:s}\"\nStart returned {:d}", "cuLiDAR", handle);
+			if (handle > 0)
+			{
+				inno_lidar_close(handle);
+			}
+			throw std::runtime_error("Could not start LiDAR");
+		}
 	}
 
 	Processor::Processor(Processor&& processor) noexcept
@@ -84,25 +94,23 @@ namespace inno
 	{
 		// It seems every package that is the last will contain no packets, this can be used to finish off and start anew
 		const auto context = static_cast<ProcessorInvasive*>(ctx);
-		if (pkt->item_number == 0)
+		auto nc = context->getNextCloud();
+		if (pkt->is_last_sub_frame == 1)
 		{
-			context->notify();
+			if (nc)
+			{
+				context->notify();
+			}
 		}
-		else
+		if (pkt->is_first_sub_frame == 1)
 		{
-			auto nc = context->getNextCloud();
-			if (!nc)
-			{
-				nc = std::make_shared<Processor::PointCloud>();
-			}
-			if (pkt->sub_idx == 0)
-			{
-				// We've started a new frame
-				const ProcessorInvasive::PointCloud pc;
-				// We should probably make sure it is not engaged
-				context->getNextCloud() = pc.makeShared();
-				//fmt::println("Starting a new frame, frame {:d}", pkt->idx );
-			}
+			const ProcessorInvasive::PointCloud pc;
+			// We should probably make sure it is not engaged
+			context->getNextCloud() = pc.makeShared();
+			nc = context->getNextCloud();
+		}
+		if (nc)
+		{
 			switch (pkt->type)
 			{
 				case INNO_ITEM_TYPE_XYZ_POINTCLOUD:
