@@ -1,0 +1,37 @@
+{
+	"version": 3,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 28
+	},
+	"configurePresets": [
+		{
+			"name": "default",
+			"hidden": true,
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/cmake-build-${presetName}",
+			"cacheVariables": {
+				"CMAKE_CUDA_COMPILER": "/usr/local/cuda-12.9/bin/nvcc",
+				"CMAKE_CUDA_ARCHITECTURES": "native",
+				"CONAN_COMMAND": "$env{HOME}/miniconda3/bin/conan",
+				"Python_ROOT_DIR": "$env{HOME}/miniconda3/"
+			}
+		},
+		{
+			"name": "debug",
+			"inherits": "default",
+			"toolchainFile": "build/Debug/generators/conan_toolchain.cmake",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "release",
+			"inherits": "default",
+			"toolchainFile": "build/Release/generators/conan_toolchain.cmake",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		}
+	]
+}
