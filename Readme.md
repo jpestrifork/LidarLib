@@ -1,6 +1,6 @@
-# Project for Sceyond LiDAR
+# Project for Seyond LiDAR
 
-This project uses the inno-lidar-sdk to allow easy acces to the Falcon K2C.
+This project uses the inno-lidar-sdk to allow easy access to the Falcon K2C.
 
 It uses a modified repository in order to handle the library using 
 [Conan](https://conan.io) which is used to handle all dependencies
@@ -24,13 +24,13 @@ The Ninja build system is used in order to speed up (re)compilation, if it is
 not installed, make sure to change the `CMakePresets.json` accordingly
 
 #### CMake
-As both this project and thhe inno-lidar-sdk uses CMake, this is a prerequisite
-The features used in this project requires the minimun version to be 3.28
+As both this project and the inno-lidar-sdk uses CMake, this is a prerequisite
+The features used in this project requires the minimum version to be 3.28
 
 #### Conan
 Conan is used to manage dependencies in the project.
 Conan version 2 is what has been used, but the later versions of version 1 
-migt still be usable.
+might still be usable.
 
 Because of the way nanobind (that is used to create bindings to python) is done
 it is unfortunately not possible to use cmake-conan.
@@ -39,7 +39,13 @@ In order to start the project, `conan install` must first be run from the base
 directory as follows:
 
 ```shell
-conan install -s build_type=Debug -of cmake-build-debug/ -c="tools.cmake.cmaketoolchain:user_presets=''" . 
+conan install -s build_type=Debug -of cmake-build-debug/ -c="tools.cmake.cmaketoolchain:user_presets=" . 
+```
+of course, you should replace with Release if you are just going to use the 
+python bindings.
+
+```shell
+conan install -s build_type=Release -of cmake-build-release/ -c="tools.cmake.cmaketoolchain:user_presets=" . 
 ```
 
 This will set up the project so that cmake can be run.
@@ -51,8 +57,8 @@ If the `inno_client_sdk` package is missing, do not run with `--build=missing`
 but make sure you have installed the package using the correct settings.
 
 #### CMake
-As both this project and thhe inno-lidar-sdk uses CMake, this is a prerequisite
-The features used in this project requires the minimun version to be 3.28
+As both this project and the inno-lidar-sdk uses CMake, this is a prerequisite
+The features used in this project requires the minimum version to be 3.28
 
 In order to configure the system for building, create the cmake configuration:
 
@@ -61,7 +67,7 @@ cmake --preset debug .
 ```
 
 ### Building the Application
-The applitation available in `src/main.cpp` demonstrates how to use the library
+The application available in `src/main.cpp` demonstrates how to use the library
 
 Assuming cmake has already been set up, you can now use the prepared directory
 and build it using

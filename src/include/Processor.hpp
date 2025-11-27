@@ -27,6 +27,7 @@ namespace inno
 		using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
 		using CloudPointer = PointCloud::Ptr;
 		CloudPointer getPointCloud(std::chrono::milliseconds waitTime = std::chrono::seconds(1));
+		static const char* getVersion();
 	protected:
 		int handle{};
 		CloudPointer pointCloud{};

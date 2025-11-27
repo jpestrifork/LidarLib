@@ -9,8 +9,6 @@
 #include <fmt/ranges.h>
 #include <sdk_client/lidar_client.h>
 
-#include <span>
-
 
 namespace inno
 {
@@ -63,6 +61,11 @@ namespace inno
 			return pointCloud;
 		}
 		return {};
+	}
+
+	const char* Processor::getVersion()
+	{
+		return inno_api_version();
 	}
 
 	void messageCallback(int /*handle*/, void* /*context*/, uint32_t /*fromRemote*/,

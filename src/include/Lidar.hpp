@@ -13,6 +13,10 @@ public:
 		: processor(ip, port, udp)
 	{}
 	Eigen::Map<Eigen::MatrixXf, Eigen::Aligned, Eigen::OuterStride<> > getPointCloud();
+	static std::string api_version()
+	{
+		return inno::Processor::getVersion();
+	}
 private:
 	inno::Processor processor;
 };
