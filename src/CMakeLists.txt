@@ -29,10 +29,10 @@ target_link_libraries(processor
 		PCL::PCL)
 
 set(Python_FIND_UNVERSIONED_NAMES FIRST)
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module )
+find_package(Python REQUIRED COMPONENTS Interpreter Development.SABIModule Development.Module )
 find_package(nanobind CONFIG REQUIRED)
 
-nanobind_add_module(inno NB_STATIC module.cpp)
+nanobind_add_module(inno STABLE_ABI NB_STATIC module.cpp)
 target_sources( inno
 	PRIVATE
 		Lidar.cpp

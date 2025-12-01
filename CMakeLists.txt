@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.28...4.0 )
+# Minimum required version is 3.26 because of Stable Python ABI
+cmake_minimum_required(VERSION 3.26...4.0 )
 
 project(cuLiDAR 
 	VERSION 1.0
