@@ -1,5 +1,6 @@
 {
     "name": "Lidar Dev",
+    "image": "lidar-dev:latest",
     "build": {
         "dockerfile": "../ubuntu.dockerfile",
         "context": ".."
