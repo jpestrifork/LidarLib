@@ -85,3 +85,19 @@ cmake --build cmake-build-debug -t inno
 this will create the two files `inno.cpython-312-x86_64-linux-gnu.so` and
 `libprocessor.so`, that will need to be put in the correct place for python to
 find them.
+
+## Usage
+
+### Using with a Dev Container (Recommended)
+
+For an easier setup with all dependencies containerized, you can use a dev container:
+
+1. Build the Python wheel file from the project
+2. Copy the generated `.whl` file to your dev container
+3. Install the wheel inside the container:
+
+```shell
+pip install /path/to/inno-*.whl
+```
+
+This approach ensures all dependencies are properly isolated and avoids potential conflicts with your system's existing packages.
