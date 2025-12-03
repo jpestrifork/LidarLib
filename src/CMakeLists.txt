@@ -44,4 +44,15 @@ target_sources( inno
 		FILE_SET HEADERS
 )
 target_link_libraries(inno PRIVATE processor)
-set_target_properties(inno PROPERTIES CMAKE_BUILD_TYPE "Release")
+set_target_properties(inno PROPERTIES CMAKE_BUILD_TYPE "Release" INSTALL_RPATH "$ORIGIN")
+
+if (SKBUILD)
+	install(
+		TARGETS inno
+		LIBRARY DESTINATION .
+	)
+	install(
+		TARGETS processor
+		LIBRARY DESTINATION .
+	)
+endif (SKBUILD)
