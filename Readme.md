@@ -97,7 +97,7 @@ For an easier setup with all dependencies containerized, you can use a dev conta
 3. Install the wheel inside the container:
 
 ```shell
-pip install /path/to/inno-*.whl
+uv pip install /path/to/lidar_lib.whl
 ```
 
 This approach ensures all dependencies are properly isolated and avoids potential conflicts with your system's existing packages.
